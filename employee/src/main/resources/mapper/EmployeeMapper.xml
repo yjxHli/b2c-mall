@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjx.b2c.employee.dao.mapper.EmployeeMapper">
+
+    <insert id="save" parameterType="com.yjx.b2c.employee.dao.po.EmployeePO" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO tb_employee ( shop_id, username, password, avatar_url)
+        VALUES (#{shopId},#{username},#{password},#{avatarUrl});
+    </insert>
+
+    <select id="findByUsername" resultType="com.yjx.b2c.employee.dao.po.EmployeePO">
+        SELECT id,
+               shop_id         AS shopId,
+               username,
+               password,
+               avatar_url      AS avatarUrl,
+               last_login_time AS lastLoginTime,
+               login_count     AS loginCount,
+               status
+        FROM tb_employee
+        WHERE username = #{username}
+        <if test="shopId != null">
+            AND shop_id = #{shopId}
+        </if>
+        LIMIT 1
+    </select>
+
+    <update id="updateLoginStatus">
+        UPDATE tb_employee
+        SET last_login_time = datetime('now', 'localtime'),
+            login_count     = login_count + 1,
+            updated_at      = datetime('now', 'localtime')
+        WHERE id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjx.b2c.shop.dao.mapper.MessageMapper">
+
+    <insert id="saveMessage" parameterType="com.yjx.b2c.shop.dao.po.MessagePO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_messages ( shop_id, title, content, msg_type, is_read)
+        VALUES (#{shopId}, #{title}, #{content}, #{msgType}, #{isRead})
+    </insert>
+
+</mapper>

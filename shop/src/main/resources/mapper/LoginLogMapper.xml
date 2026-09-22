@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjx.b2c.shop.dao.mapper.LoginLogMapper">
+
+    <insert id="saveLoginLog" parameterType="com.yjx.b2c.shop.dao.po.LoginLogPO" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO tb_login_logs (user_id, user_type, login_ip, login_device, login_location, login_time, user_agent,
+                                   status)
+        VALUES (#{userId}, #{userType}, #{loginIp}, #{loginDevice}, #{loginLocation}, datetime('now', 'localtime'),
+                #{userAgent}, #{status})
+    </insert>
+
+</mapper>

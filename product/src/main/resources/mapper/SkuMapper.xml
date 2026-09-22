@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjx.b2c.product.dao.mapper.SkuMapper">
+
+    <insert id="save" parameterType="com.yjx.b2c.product.dao.po.SkuPO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_sku (shop_id, category_id, product_name, product_desc, product_type, price, stock,
+                            delivery_content, cover_url, status, operator_id)
+        VALUES (#{shopId}, #{categoryId}, #{productName}, #{productDesc}, #{productType}, #{price}, #{stock},
+                #{deliveryContent}, #{coverUrl}, #{status}, #{operatorId})
+    </insert>
+
+    <update id="updateStatus">
+        UPDATE tb_sku
+        SET status     = #{status},
+            updated_at = datetime('now', 'localtime')
+        WHERE id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjx.b2c.order.dao.mapper.OrderMapper">
+
+    <select id="findById" resultType="com.yjx.b2c.order.dao.po.OrderPO">
+        SELECT id,
+               order_no         AS orderNo,
+               shop_id          AS shopId,
+               buyer_id         AS buyerId,
+               sku_id           AS skuId,
+               product_name     AS productName,
+               quantity,
+               amount,
+               status,
+               receiver_name    AS receiverName,
+               receiver_phone   AS receiverPhone,
+               receiver_address AS receiverAddress,
+               pay_time         AS payTime,
+               pay_type         AS payType,
+               trade_no         AS tradeNo,
+               ship_time        AS shipTime,
+               logistics_no     AS logisticsNo,
+               operator_id      AS operatorId
+        FROM tb_order
+        WHERE id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.yjx.b2c.order.dao.po.OrderPO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_order (order_no, shop_id, buyer_id, sku_id, product_name, quantity, amount, status,
+                              receiver_name, receiver_phone, receiver_address)
+        VALUES (#{orderNo}, #{shopId}, #{buyerId}, #{skuId}, #{productName}, #{quantity}, #{amount}, #{status},
+                #{receiverName}, #{receiverPhone}, #{receiverAddress})
+    </insert>
+
+    <update id="markPaid">
+        UPDATE tb_order
+        SET status     = 1, -- 1-已支付
+            pay_type   = #{payType},
+            trade_no   = #{tradeNo},
+            pay_time   = datetime('now', 'localtime'),
+            updated_at = datetime('now', 'localtime')
+        WHERE id = #{id}
+          AND status = 0
+    </update>
+
+    <update id="ship">
+        UPDATE tb_order
+        SET status       = 2, -- 2-已发货
+            ship_time    = datetime('now', 'localtime'),
+            logistics_no = #{logisticsNo},
+            operator_id  = #{operatorId},
+            updated_at   = datetime('now', 'localtime')
+        WHERE id = #{id}
+          AND status = 1
+    </update>
+
+</mapper>

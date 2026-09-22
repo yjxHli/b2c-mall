@@ -1,0 +1,20 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: product-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.100.22.158:8848
+        namespace: yangjingxi
+      config:
+        server-addr: 47.100.22.158:8848
+        namespace: yangjingxi
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:D:/AI_Coding/b2c/product.db
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
