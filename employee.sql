@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS tb_employee (
 
 CREATE INDEX IF NOT EXISTS idx_shop_id ON tb_employee(shop_id);
 CREATE INDEX IF NOT EXISTS idx_employee_username ON tb_employee(username);
+-- 同一店铺内账号唯一：保证事件重放/补偿重试幂等
+CREATE UNIQUE INDEX IF NOT EXISTS uk_employee_shop_username ON tb_employee(shop_id, username);
 
 
 -- ============================================

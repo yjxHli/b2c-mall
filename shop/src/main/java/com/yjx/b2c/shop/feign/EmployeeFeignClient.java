@@ -1,7 +1,7 @@
 package com.yjx.b2c.shop.feign;
 
 import com.yjx.b2c.common.response.BaseResponseVO;
-import com.yjx.b2c.shop.feign.request.AddEmployeeRequestVO;
+import com.yjx.b2c.common.contract.AddEmployeeRequestVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

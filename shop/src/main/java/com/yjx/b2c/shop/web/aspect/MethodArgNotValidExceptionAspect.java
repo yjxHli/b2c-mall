@@ -1,6 +1,8 @@
 package com.yjx.b2c.shop.web.aspect;
 
+import com.yjx.b2c.common.exception.BizException;
 import com.yjx.b2c.common.response.BaseResponseVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.ObjectError;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
  * @description
  */
 @RestControllerAdvice
+@Slf4j
 public class MethodArgNotValidExceptionAspect {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -34,5 +37,20 @@ public class MethodArgNotValidExceptionAspect {
     @ExceptionHandler(value = IllegalArgumentException.class)
     public BaseResponseVO<?> handleIllegalArgument(IllegalArgumentException ex) {
         return new BaseResponseVO<>(400, ex.getMessage());
+    }
+
+    @ExceptionHandler(value = BizException.class)
+    public BaseResponseVO<?> handleBizException(BizException ex) {
+        return new BaseResponseVO<>(ex.getCode(), ex.getMessage());
+    }
+
+    /**
+     * 未预期异常的兜底：只接 RuntimeException，避免截胡 Spring MVC 自身的
+     * 405/415 等基础设施异常（那两类由 DefaultHandlerExceptionResolver 处理）。
+     */
+    @ExceptionHandler(value = RuntimeException.class)
+    public BaseResponseVO<?> handleUnexpected(RuntimeException ex) {
+        log.error("登录接口未预期异常", ex);
+        return new BaseResponseVO<>(500, "服务器内部错误");
     }
 }

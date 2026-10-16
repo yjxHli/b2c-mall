@@ -28,7 +28,7 @@
     <update id="updateLoginStatus">
         UPDATE tb_employee
         SET last_login_time = datetime('now', 'localtime'),
-            login_count     = login_count + 1,
+            login_count     = COALESCE(login_count, 0) + 1,
             updated_at      = datetime('now', 'localtime')
         WHERE id = #{id}
     </update>

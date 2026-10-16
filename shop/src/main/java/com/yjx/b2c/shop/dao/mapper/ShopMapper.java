@@ -17,6 +17,8 @@ public interface ShopMapper {
 
     int exist(@Param("shopName") String shopName);
 
+    int existByAccount(@Param("adminAccount") String adminAccount);
+
     ShopPO findByAccount(@Param("adminAccount") String adminAccount);
 
     int updateLoginStatus(@Param("id") Integer id);

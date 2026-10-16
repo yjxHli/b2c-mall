@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjx.b2c.shop.dao.mapper.OutboxMapper">
+
+    <insert id="insert" parameterType="com.yjx.b2c.shop.dao.po.OutboxPO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_register_event_outbox (event_type, aggregate_id, payload, status, retry_count, next_retry_at)
+        VALUES (#{eventType}, #{aggregateId}, #{payload}, #{status}, 0, datetime('now', 'localtime'))
+    </insert>
+
+    <select id="findById" resultType="com.yjx.b2c.shop.dao.po.OutboxPO">
+        SELECT id,
+               event_type    AS eventType,
+               aggregate_id  AS aggregateId,
+               payload,
+               status,
+               retry_count   AS retryCount,
+               next_retry_at AS nextRetryAt,
+               last_error    AS lastError
+        FROM tb_register_event_outbox
+        WHERE id = #{id}
+    </select>
+
+    <select id="findRetryable" resultType="com.yjx.b2c.shop.dao.po.OutboxPO">
+        SELECT id,
+               event_type    AS eventType,
+               aggregate_id  AS aggregateId,
+               payload,
+               status,
+               retry_count   AS retryCount,
+               next_retry_at AS nextRetryAt,
+               last_error    AS lastError
+        FROM tb_register_event_outbox
+        WHERE status IN (0, 2)
+          AND retry_count &lt; #{maxRetry}
+          AND next_retry_at &lt;= datetime('now', 'localtime')
+        ORDER BY id
+        LIMIT #{limit}
+    </select>
+
+    <update id="markSuccess">
+        UPDATE tb_register_event_outbox
+        SET status = 1, updated_at = datetime('now', 'localtime')
+        WHERE id = #{id}
+    </update>
+
+    <update id="markRetry">
+        UPDATE tb_register_event_outbox
+        SET status = 2,
+            retry_count = retry_count + 1,
+            next_retry_at = datetime('now', 'localtime', '+' || ((retry_count + 1) * 10) || ' seconds'),
+            last_error = #{lastError},
+            updated_at = datetime('now', 'localtime')
+        WHERE id = #{id}
+    </update>
+</mapper>

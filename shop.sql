@@ -16,6 +16,28 @@ CREATE TABLE IF NOT EXISTS tb_shop
 );
 
 CREATE INDEX IF NOT EXISTS idx_shop_admin_account ON tb_shop (admin_account);
+-- 店铺名唯一：防并发重复注册
+CREATE UNIQUE INDEX IF NOT EXISTS uk_shop_shop_name ON tb_shop (shop_name);
+-- 管理员账号全局唯一：否则按账号登录会在多条记录中命中不确定的一条
+CREATE UNIQUE INDEX IF NOT EXISTS uk_shop_admin_account ON tb_shop (admin_account);
+
+CREATE TABLE IF NOT EXISTS tb_register_event_outbox
+(
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    event_type    VARCHAR(64) NOT NULL,
+    aggregate_id  INTEGER     NOT NULL,
+    payload       TEXT        NOT NULL,
+    status        TINYINT     DEFAULT 0,
+    retry_count   INTEGER     DEFAULT 0,
+    next_retry_at DATETIME    DEFAULT CURRENT_TIMESTAMP,
+    last_error    VARCHAR(500),
+    created_at    DATETIME    DEFAULT CURRENT_TIMESTAMP,
+    updated_at    DATETIME    DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_outbox_status_next_retry
+    ON tb_register_event_outbox (status, next_retry_at);
+
 
 
 -- ============================================

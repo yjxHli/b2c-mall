@@ -1,12 +1,9 @@
 package com.yjx.b2c.shop.web;
 
-import com.google.common.eventbus.EventBus;
 import com.yjx.b2c.common.bean.ClientInfo;
 import com.yjx.b2c.common.response.BaseResponseVO;
 import com.yjx.b2c.common.util.ClientInfoUtil;
-import com.yjx.b2c.shop.dao.po.ShopPO;
 import com.yjx.b2c.shop.service.ShopService;
-import com.yjx.b2c.shop.service.event.ShopRegisterEvent;
 import com.yjx.b2c.shop.web.request.ShopLoginRequestVO;
 import com.yjx.b2c.shop.web.request.ShopRegisterRequestVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @author yjx
@@ -29,20 +25,11 @@ import java.util.List;
 public class ShopController {
     @Autowired
     public ShopService shopService;
-    @Autowired
-    public EventBus eventBus;
 
     @PostMapping("/register")
-    public BaseResponseVO<?> register(@RequestBody @Validated ShopRegisterRequestVO req) {
+    public BaseResponseVO<Integer> register(@RequestBody @Validated ShopRegisterRequestVO req) {
         Integer id = shopService.register(req);
-
-        ShopRegisterEvent event = new ShopRegisterEvent();
-        event.setShopId(id);
-        event.setShopName(req.getShopName());
-        event.setAdminAccount(req.getAdminAccount());
-        event.setAdminPwd(req.getAdminPassword());
-        eventBus.post(event);
-        return new BaseResponseVO<>();
+        return new BaseResponseVO<>(id);
     }
 
     @PostMapping("/login")

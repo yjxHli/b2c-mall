@@ -49,12 +49,20 @@ public class ClientInfoUtil {
         }
         String os = ua.getOs() == null ? UNKNOWN : ua.getOs().getName();
         String browser = ua.getBrowser() == null ? UNKNOWN : ua.getBrowser().getName();
+        // 两头都识别不出来时不再拼出 "Unknown/Unknown"，统一回落为未知
+        if (isUnknown(os) && isUnknown(browser)) {
+            return UNKNOWN;
+        }
         return os + "/" + browser;
     }
 
     /**
      * 依据 IP 粗略判断登录地点，公网 IP 的归属地需接入 IP 库/第三方服务后在此扩展
      */
+    private static boolean isUnknown(String value) {
+        return value == null || value.isBlank() || UNKNOWN.equals(value) || "unknown".equalsIgnoreCase(value);
+    }
+
     private static String resolveLocation(String ip) {
         if (ip == null || ip.isBlank()) {
             return UNKNOWN;

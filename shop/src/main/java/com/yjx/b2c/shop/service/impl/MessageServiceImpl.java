@@ -1,6 +1,7 @@
 package com.yjx.b2c.shop.service.impl;
 
 import cn.hutool.core.lang.Assert;
+import com.yjx.b2c.common.exception.BizException;
 import com.yjx.b2c.shop.dao.mapper.MessageMapper;
 import com.yjx.b2c.shop.dao.po.MessagePO;
 import com.yjx.b2c.shop.service.MessageService;
@@ -30,6 +31,8 @@ public class MessageServiceImpl implements MessageService {
         po.setMsgType(1);
         po.setIsRead(0);
         Integer row = messageMapper.saveMessage(po);
-        Assert.equals(row, 1, "保存欢迎消息异常");
+        if (row == null || row != 1) {
+            throw BizException.serverError("保存欢迎消息异常");
+        }
     }
 }

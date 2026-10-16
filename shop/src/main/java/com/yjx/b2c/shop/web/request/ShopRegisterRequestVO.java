@@ -16,7 +16,9 @@ public class ShopRegisterRequestVO {
     @Length(max = 6, message = "店铺名过长")
     private String shopName;
     @NotBlank(message = "账户不能为空")
+    @Length(max = 100, message = "账户过长")
     private String adminAccount;
     @NotBlank(message = "账户密码")
+    @Length(min = 6, max = 100, message = "密码长度必须在 6 到 100 位之间")
     private String adminPassword;
 }

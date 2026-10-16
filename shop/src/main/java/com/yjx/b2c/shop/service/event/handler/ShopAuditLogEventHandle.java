@@ -26,6 +26,11 @@ public class ShopAuditLogEventHandle implements InitializingBean {
 
     @Subscribe
     public void handler(ShopLoginEvent event) {
+        if (event.getClientInfo() == null) {
+            // 缺少客户端信息时跳过审计，而不是让异步线程抛 NPE
+            log.warn("登录事件缺少客户端信息，跳过审计记录, shopId={}", event.getShopId());
+            return;
+        }
         LoginLogPO po = new LoginLogPO();
         po.setUserId(event.getShopId());
         // 1-店铺

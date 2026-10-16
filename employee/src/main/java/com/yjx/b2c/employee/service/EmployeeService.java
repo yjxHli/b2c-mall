@@ -1,7 +1,7 @@
 package com.yjx.b2c.employee.service;
 
 import com.yjx.b2c.common.bean.ClientInfo;
-import com.yjx.b2c.employee.web.request.AddEmployeeRequestVO;
+import com.yjx.b2c.common.contract.AddEmployeeRequestVO;
 import com.yjx.b2c.employee.web.request.LoginRequestVO;
 
 /**

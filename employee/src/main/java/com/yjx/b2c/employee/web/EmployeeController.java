@@ -4,7 +4,7 @@ import com.yjx.b2c.common.bean.ClientInfo;
 import com.yjx.b2c.common.response.BaseResponseVO;
 import com.yjx.b2c.common.util.ClientInfoUtil;
 import com.yjx.b2c.employee.service.EmployeeService;
-import com.yjx.b2c.employee.web.request.AddEmployeeRequestVO;
+import com.yjx.b2c.common.contract.AddEmployeeRequestVO;
 import com.yjx.b2c.employee.web.request.LoginRequestVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

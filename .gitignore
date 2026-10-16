@@ -36,3 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### 本地构建仓库（DSH 受限沙箱下的工作区本地 Maven 仓库）###
+.m2repo/

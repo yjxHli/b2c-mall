@@ -3,6 +3,7 @@ package com.yjx.b2c.employee;
 
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.SubscriberExceptionHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -16,8 +17,10 @@ import java.util.concurrent.Executors;
 public class EmployeeApplication {
 
     @Bean
-    public EventBus eventBus() {
-        return new AsyncEventBus(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
+    public EventBus eventBus(SubscriberExceptionHandler subscriberExceptionHandler) {
+        return new AsyncEventBus(
+                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()),
+                subscriberExceptionHandler);
     }
 
     public static void main(String[] args) {

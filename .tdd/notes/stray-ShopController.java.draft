@@ -1,0 +1,26 @@
+package com.yjx.b2c.shop.web;
+
+import com.yjx.b2c.common.response.BaseResponseVO;
+import com.yjx.b2c.shop.service.event.ShopRegisterEvent;
+import com.yjx.b2c.shop.web.request.ShopRegisterRequestVO;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+/**
+ * @author yjx
+ * @date 2026/10/15
+ * @description
+ */
+@PostMapping("/register")
+public BaseResponseVO<Integer> register(@RequestBody @Validated ShopRegisterRequestVO req) {
+    Integer id = shopService.register(req);
+
+    ShopRegisterEvent event = new ShopRegisterEvent();
+    event.setShopId(id);
+    event.setShopName(req.getShopName());
+    event.setAdminAccount(req.getAdminAccount());
+    event.setAdminPwd(req.getAdminPassword());
+    eventBus.post(event);
+    return new BaseResponseVO<>(id);   // 原来是 new BaseResponseVO<>()，data 为 null
+}
